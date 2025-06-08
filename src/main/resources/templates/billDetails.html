@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Bill Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Professional Dark Theme */
+        body {
+            background-color: #1c1c1c; /* Deep charcoal background */
+            color: #e0e0e0; /* Soft white text for high readability */
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; /* Modern, professional font stack */
+            padding: 30px;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center content horizontally */
+            min-height: 100vh; /* Ensure body takes full viewport height */
+            box-sizing: border-box;
+        }
+
+        h2 {
+            text-align: center;
+            color: #bdbd00; /* Subtle gold for emphasis */
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            font-weight: 600; /* Slightly bolder for heading */
+            letter-spacing: 0.5px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #333; /* Underline for emphasis */
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        table {
+            width: 85%; /* Slightly narrower for a more contained look */
+            max-width: 1000px; /* Max width for large screens */
+            margin: 25px 0;
+            border-collapse: separate;
+            border-spacing: 0;
+            background-color: #2a2a2a; /* Slightly lighter dark for table background */
+            border-radius: 8px; /* Softer rounded corners */
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* Professional, subtle shadow */
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        th, td {
+            padding: 16px 22px; /* Ample padding for clear data separation */
+            text-align: left;
+            border-bottom: 1px solid #3a3a3a; /* Subtle, slightly darker border */
+            color: #f0f0f0; /* Consistent light text */
+            font-size: 0.95em;
+        }
+
+        th {
+            background-color: #383838; /* Darker grey for header */
+            color: #bdbd00; /* Gold text for headers */
+            font-weight: 600; /* Professional weight */
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            /* Optional: Add a subtle linear gradient for a modern feel */
+            /* background: linear-gradient(to bottom, #3a3a3a, #303030); */
+        }
+
+        tr:last-child td {
+            border-bottom: none; /* No border on the last row */
+        }
+
+        /* Professional Status Badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 7px 12px;
+            border-radius: 4px; /* Slightly rounded corners for a sharp look */
+            font-weight: 500; /* Moderate font weight */
+            text-transform: uppercase;
+            font-size: 0.8em;
+            letter-spacing: 0.2px;
+            transition: all 0.2s ease-in-out;
+            border: 1px solid transparent; /* Subtle border for definition */
+        }
+
+        .status-badge i {
+            margin-right: 7px;
+            font-size: 1em;
+        }
+
+        .paid {
+            background-color: #285a3a; /* Muted, professional green */
+            color: #e6ffe6; /* Light green text */
+            border-color: #3e8e58;
+        }
+
+        .unpaid {
+            background-color: #8c3b3b; /* Muted, professional red */
+            color: #ffe6e6; /* Light red text */
+            border-color: #a34b4b;
+        }
+
+        /* Professional Buttons */
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px; /* Slightly smaller gap for neatness */
+        }
+
+        .btn {
+            padding: 10px 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+            border-radius: 5px; /* Professional, slightly rounded corners */
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #e0e0e0; /* Light text on button */
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* Subtle button shadow */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px); /* Subtle lift on hover */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .toggle-btn {
+            background-color: #4a69bd; /* Professional blue */
+            color: #ffffff;
+        }
+
+        .toggle-btn:hover {
+            background-color: #3b5aa7; /* Darker blue on hover */
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            h2 {
+                font-size: 1.8em;
+                margin-bottom: 25px;
+            }
+            table {
+                width: 100%;
+                margin: 20px 0;
+            }
+            th, td {
+                padding: 12px 15px;
+                font-size: 0.85em;
+            }
+            .status-badge {
+                padding: 6px 10px;
+                font-size: 0.75em;
+            }
+            .btn {
+                padding: 8px 15px;
+                font-size: 0.8em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h2 {
+                font-size: 1.5em;
+            }
+            th, td {
+                padding: 10px;
+            }
+            .btn {
+                font-size: 0.75em;
+                padding: 7px 12px;
+            }
+            .btn-container {
+                flex-direction: column; /* Stack buttons on very small screens */
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h2><i class="fas fa-file-invoice"></i> Bill Overview</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>Bill ID</th>
+        <th>Patient ID</th>
+        <th>Amount</th>
+        <th>Payment Status</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="bill : ${bills}">
+        <td th:text="${bill.billId}"></td>
+        <td th:text="${bill.patientId}"></td>
+        <td th:text="'₹' + ${bill.totalAmount}"></td>
+        <td>
+                <span th:classappend="${bill.paymentStatus == 'PAID' ? 'paid' : 'unpaid'}" class="status-badge">
+                    <i th:class="${bill.paymentStatus == 'PAID' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle'}"></i>
+                    <span th:text="${bill.paymentStatus}"></span>
+                </span>
+        </td>
+        <td>
+            <div class="btn-container">
+                <form th:action="@{/billing/updatePaymentStatus/{billId}(billId=${bill.billId})}" method="post">
+                    <button type="submit" class="btn toggle-btn">
+                        <i class="fas fa-sync-alt"></i> Change Status
+                    </button>
+                </form>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Portal Home</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            gap: 40px;
+        }
+
+        .card {
+            background-color: #1c1c1c;
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+            text-align: center;
+            width: 250px;
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-login {
+            background-color: #2962ff; /* blue */
+        }
+
+        .btn-login:hover {
+            background-color: #0039cb;
+        }
+
+        .btn-register {
+            background-color: #ff6d00; /* orange */
+        }
+
+        .btn-register:hover {
+            background-color: #e65100;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <h2>Login as Admin</h2>
+        <a th:href="@{/login}">
+            <button class="btn btn-login">Login</button>
+        </a>
+    </div>
+    <div class="card">
+        <h2>Register as Admin</h2>
+        <a th:href="@{/register}">
+            <button class="btn btn-register">Register</button>
+        </a>
+    </div>
+</div>
+</body>
+</html>

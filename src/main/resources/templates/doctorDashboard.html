@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Doctor Dashboard</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="sidebar">
+  <div class="profile">
+    <img src="/images/doctor-logo.png" alt="Doctor Avatar">
+    <h2 th:text="${doctor.name}">Dr. John Smith</h2>
+    <p>DOCTOR</p>
+  </div>
+  <div class="nav-links">
+    <a href="/doctorDashboard" class="active">🏠 Dashboard</a>
+    <a href="/doctor/patients">👥 Patients</a>
+    <a href="/doctor/todays-appointments">📅 Appointments</a>
+    <a href="/doctor/add-availability">🗓️ Availability</a>
+    <a href="/logout">🔓 Logout</a>
+  </div>
+</div>
+
+<div class="main">
+  <!-- Stats -->
+  <div class="section stats-grid">
+    <div class="stat-box stat-blue">
+      <h3>Total Patients</h3>
+      <p th:text="${stats != null and stats.TOTAL != null ? stats.TOTAL : 0}">0</p>
+    </div>
+    <div class="stat-box stat-green">
+      <h3>Confirmed Appointments</h3>
+      <p th:text="${stats != null and stats.CONFIRMED != null ? stats.CONFIRMED : 0}">0</p>
+    </div>
+    <div class="stat-box stat-orange">
+      <h3>Scheduled Today</h3>
+      <p th:text="${stats != null and stats.SCHEDULED != null ? stats.SCHEDULED : 0}">0</p>
+    </div>
+  </div>
+
+  <!-- Profile Summary -->
+  <div class="section">
+    <h2>Profile Summary</h2>
+    <div class="card">
+      <p><strong>Specialization:</strong> <span th:text="${doctor.specialization}">Cardiology</span></p>
+      <p><strong>Contact:</strong> <span th:text="${doctor.contactNumber}">9876543210</span></p>
+    </div>
+  </div>
+
+  <!-- Appointments -->
+  <div class="section">
+    <h2>Today's Appointments</h2>
+    <div th:if="${#lists.isEmpty(appointments)}" class="card">
+      <p>No appointments today.</p>
+    </div>
+    <div th:each="appointment : ${appointments}" class="card">
+      <p><strong>Patient:</strong> <span th:text="${appointment.patient.name}">Name</span></p>
+      <p><strong>Time:</strong> <span th:text="${appointment.timeSlot}">10:30 AM</span></p>
+      <p><strong>Status:</strong> <span th:text="${appointment.status}">CONFIRMED</span></p>
+      <div>
+        <a th:href="@{'/patient/' + ${appointment.patient.patientId}}" class="btn">View</a>
+<!--        <form th:action="@{'/appointments/' + ${appointment.appointment_id} + '/complete'}" method="post" style="display:inline;">-->
+<!--          <button type="submit" class="btn">Mark as Complete</button>-->
+<!--        </form>-->
+      </div>
+    </div>
+  </div>
+
+  <!-- Weekly Availability -->
+  <div class="section">
+    <h2>Weekly Availability</h2>
+    <div th:if="${#lists.isEmpty(availability)}" class="card">
+      <p>No availability set.</p>
+    </div>
+    <div th:each="slot : ${availability}" class="card">
+      <p th:text="${slot}">Monday: 10 AM – 2 PM</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

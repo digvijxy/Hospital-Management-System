@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Secure Payment Gateway</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: #0f0f0f; /* Near black */
+            color: #e0e0e0; /* Light gray text */
+            font-family: 'Open Sans', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .main-container {
+            display: flex;
+            width: 80%;
+            max-width: 1200px;
+            background-color: #1a1a1a; /* Darker charcoal */
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+            border: 1px solid rgba(42, 42, 42, 0.5); /* Subtle border */
+        }
+        .left-box, .right-box {
+            padding: 50px;
+            box-sizing: border-box;
+            flex: 1;
+        }
+        .left-box {
+            background: linear-gradient(145deg, #1f1f1f, #0a0a0a); /* Deeper gradient */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border-right: 1px solid rgba(60, 60, 60, 0.5); /* Clearer separator */
+            position: relative;
+            overflow: hidden;
+        }
+        .left-box::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(0, 128, 186, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: moveLight 8s infinite alternate;
+        }
+        .left-box::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(0, 192, 192, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: moveLight 10s infinite alternate-reverse;
+        }
+
+        @keyframes moveLight {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        h2 {
+            font-family: 'Montserrat', sans-serif;
+            color: #00BFFF; /* Deep Sky Blue */
+            margin-bottom: 25px;
+            font-weight: 700;
+            font-size: 2.2em;
+            letter-spacing: 1px;
+        }
+        .left-box h2 {
+            font-size: 2.8em;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            color: #00BFFF;
+        }
+        .left-box p {
+            font-size: 1.15em;
+            line-height: 1.7;
+            color: #b0b0b0;
+            margin-bottom: 35px;
+            max-width: 450px;
+        }
+        .icon-large {
+            font-size: 5em;
+            color: #00C851; /* Vibrant green for security icon */
+            margin-bottom: 30px;
+            filter: drop-shadow(0 0 10px rgba(0, 200, 81, 0.5));
+        }
+        .detail-group {
+            margin-bottom: 18px;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.08); /* Dashed separator */
+        }
+        .detail-group:last-of-type {
+            border-bottom: none;
+        }
+        .detail-label {
+            font-weight: 600;
+            color: #b0b0b0;
+            flex-basis: 40%;
+            text-align: left;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.05em;
+        }
+        .detail-value {
+            font-weight: 600;
+            color: #e0e0e0;
+            flex-basis: 60%;
+            text-align: right;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.05em;
+        }
+        .payment-amount {
+            font-size: 1.5em;
+            color: #00BFFF; /* Deep Sky Blue */
+            font-weight: 700;
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 191, 255, 0.3);
+        }
+        .btn {
+            padding: 18px 30px;
+            font-size: 1.2em;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            background-color: #008080; /* Teal for action */
+            color: white;
+            font-weight: 700;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            width: 100%;
+            margin-top: 40px;
+            letter-spacing: 0.8px;
+            box-shadow: 0 5px 20px rgba(0, 128, 128, 0.3);
+        }
+        .btn:hover {
+            background-color: #006666;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 128, 128, 0.5);
+        }
+        .security-badges {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: #888;
+        }
+        .security-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #a0a0a0;
+        }
+        .security-badge i {
+            font-size: 1.8em;
+            color: #00C851; /* Security green */
+            margin-bottom: 8px;
+        }
+        .security-badge span {
+            font-weight: 600;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .main-container {
+                flex-direction: column;
+                width: 95%;
+            }
+            .left-box, .right-box {
+                padding: 30px;
+            }
+            .left-box {
+                border-right: none;
+                border-bottom: 1px solid rgba(60, 60, 60, 0.5);
+                border-radius: 15px 15px 0 0;
+            }
+            .right-box {
+                border-radius: 0 0 15px 15px;
+            }
+            .left-box::before, .left-box::after {
+                display: none; /* Hide animated light on small screens */
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <div class="left-box">
+        <i class="fas fa-shield-alt icon-large"></i>
+        <h2>Your Secure Transaction</h2>
+        <p>At our core, we prioritize the security of your financial data. Every payment is processed through a highly encrypted gateway, ensuring your privacy and peace of mind.</p>
+        <div class="security-badges">
+            <div class="security-badge">
+                <i class="fas fa-lock"></i>
+                <span>SSL Secured</span>
+            </div>
+            <div class="security-badge">
+                <i class="fas fa-certificate"></i>
+                <span>PCI Compliant</span>
+            </div>
+            <div class="security-badge">
+                <i class="fas fa-fingerprint"></i>
+                <span>Fraud Protection</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="right-box">
+        <h2>Appointment Payment Summary</h2>
+
+        <div class="details-section">
+            <div class="detail-group">
+                <span class="detail-label">Patient Name:</span>
+                <span class="detail-value" th:text="${name}"></span>
+            </div>
+            <div class="detail-group">
+                <span class="detail-label">Doctor Name:</span>
+                <span class="detail-value" th:text="${doctor}"></span>
+            </div>
+            <div class="detail-group">
+                <span class="detail-label">Appointment Date:</span>
+                <span class="detail-value" th:text="${date}"></span>
+            </div>
+            <div class="detail-group">
+                <span class="detail-label">Time Slot:</span>
+                <span class="detail-value" th:text="${timeSlot}"></span>
+            </div>
+            <div class="detail-group">
+                <span class="detail-label">Appointment Status:</span>
+                <span class="detail-value" th:text="${status}"></span>
+            </div>
+        </div>
+
+        <div class="payment-amount">
+            Total Payment Due: ₹300
+        </div>
+
+        <form th:action="@{/billing/confirmPayment}" method="post">
+            <input type="hidden" name="patientId" th:value="${patientId}">
+            <input type="hidden" name="totalAmount" value="300">
+            <input type="hidden" name="paymentStatus" value="UNPAID">
+            <button type="submit" class="btn">Confirm & Download Bill</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

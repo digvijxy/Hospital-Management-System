@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Hospital Management Login - Pure Black</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pure-black: #000000;
+            --container-bg: #0a0a0a; /* Slightly off-black for subtle contrast */
+            --accent-blue: #007bff; /* Bright blue for accents */
+            --accent-blue-hover: #0056b3; /* Darker blue for hover */
+            --text-light: #e0e0e0; /* Light gray for general text */
+            --text-lighter: #ffffff; /* Pure white for titles */
+            --input-bg: #1a1a1a; /* Darker grey for input fields */
+            --input-border: #333333; /* Darker border for inputs */
+            --input-focus-shadow: rgba(0, 123, 255, 0.5); /* Blue shadow for focus */
+            --error-bg: #a00000; /* Dark red for error background */
+            --error-text: #ffcccc; /* Light red for error text */
+            --success-bg: #006400; /* Dark green for success background */
+            --success-text: #ccffcc; /* Light green for success text */
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--pure-black); /* Pure black body */
+            color: var(--text-light);
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            width: 90%;
+            max-width: 1000px;
+            min-height: 550px;
+            background-color: var(--container-bg); /* Slightly off-black container */
+            border-radius: 15px;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8); /* Stronger, diffused shadow */
+            overflow: hidden;
+            border: 1px solid #1a1a1a; /* Very subtle border */
+        }
+
+        .left-panel {
+            flex: 1;
+            background: linear-gradient(135deg, #0d0d0d, #222222); /* Very dark gradient */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            color: var(--text-lighter);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-right: 1px solid #111111; /* Subtle separator */
+        }
+
+        .left-panel::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.02); /* Extremely subtle glow */
+            border-radius: 50%;
+            transform: rotate(30deg);
+        }
+
+        .left-panel::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            right: -50px;
+            width: 250px;
+            height: 250px;
+            background: rgba(255, 255, 255, 0.01); /* Even more subtle glow */
+            border-radius: 50%;
+            transform: rotate(-45deg);
+        }
+
+        .left-panel h1 {
+            font-size: 2.8em;
+            margin-bottom: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3); /* Subtle glow on text */
+        }
+
+        .left-panel p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            opacity: 0.85;
+        }
+
+        .right-panel {
+            flex: 1;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--container-bg); /* Match container background */
+        }
+
+        .login-form-container {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .right-panel h2 {
+            font-size: 2.2em;
+            margin-bottom: 30px;
+            color: var(--accent-blue); /* Bright blue for headings */
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: calc(100% - 24px);
+            padding: 12px;
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            font-size: 1em;
+            background-color: var(--input-bg); /* Dark input background */
+            color: var(--text-light); /* Light text in inputs */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px var(--input-focus-shadow);
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--accent-blue);
+            color: var(--text-lighter);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            letter-spacing: 0.5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4); /* Stronger shadow for buttons */
+        }
+
+        button:hover {
+            background-color: var(--accent-blue-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .message {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Clear shadows for messages */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .error-message {
+            background-color: var(--error-bg);
+            color: var(--error-text);
+            border: 1px solid var(--error-text); /* Border matches text for intensity */
+        }
+
+        .logout-message {
+            background-color: var(--success-bg);
+            color: var(--success-text);
+            border: 1px solid var(--success-text); /* Border matches text for intensity */
+        }
+
+        .message p {
+            margin: 0;
+            padding-left: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                width: 95%;
+                min-height: auto;
+            }
+            .left-panel {
+                padding: 30px;
+                min-height: 250px;
+                border-right: none;
+                border-bottom: 1px solid #111111; /* Separator for stacked layout */
+            }
+            .left-panel h1 {
+                font-size: 2.2em;
+            }
+            .left-panel p {
+                font-size: 1em;
+            }
+            .right-panel {
+                padding: 30px;
+            }
+            .right-panel h2 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="left-panel">
+        <h1>Hospital Management System</h1>
+        <p>Empowering healthcare professionals with seamless access and efficient management.</p>
+        <p>Your trusted partner in patient care.</p>
+    </div>
+    <div class="right-panel">
+        <div class="login-form-container">
+            <h2>Login to Your Account</h2>
+            <div th:if="${param.error}" class="message error-message">
+                <p>⚠️ Access denied: Please check your username and password.</p>
+            </div>
+            <div th:if="${param.logout}" class="message logout-message">
+                <p>✅ You have been successfully logged out.</p>
+            </div>
+            <form th:action="@{/login}" method="post">
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" required />
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required />
+                </div>
+                <button type="submit">Secure Login</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

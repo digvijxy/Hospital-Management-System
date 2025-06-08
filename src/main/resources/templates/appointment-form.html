@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Your Appointment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            padding: 20px;
+        }
+
+        .form-container {
+            max-width: 700px;
+            margin: auto;
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 188, 212, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            color: #58a6ff;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            border: 1px solid #30363d;
+            background-color: #0d1117;
+            color: #ffffff;
+        }
+
+        .error-dialog {
+            background-color: #da3633;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            color: white;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background-color: #238636;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            display: block;
+            margin: auto;
+        }
+
+        .btn-primary:hover {
+            background-color: #2ea043;
+        }
+
+        .info-text {
+            margin-bottom: 15px;
+            color: #8b949e;
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <h1>Schedule Your Appointment</h1>
+
+    <div th:if="${error}" class="error-dialog">
+        <p th:text="${error}">Error message</p>
+    </div>
+
+    <form th:action="@{/schedule-appointment/{id}(id=${id})}" th:object="${appointment}" method="POST">
+
+        <div class="info-text">
+            <strong>Patient Name:</strong> <span th:text="${patientName}">John Smith</span>
+        </div>
+
+        <div class="info-text">
+            <strong>Doctor Name:</strong> <span th:text="${doctorName}">Dr. Emily White</span>
+        </div>
+
+        <label for="appointmentDate">Appointment Date:</label>
+        <input type="date" th:field="*{appointmentDate}" id="appointmentDate" required />
+        <div th:if="${#fields.hasErrors('appointmentDate')}" th:errors="*{appointmentDate}" class="error-dialog"></div>
+
+        <label for="timeSlot">Time Slot:</label>
+        <select th:field="*{timeSlot}" id="timeSlot" required>
+            <option value="" disabled selected>-- Select Time Slot --</option>
+            <option value="09:00 AM - 09:30 AM">9:00 AM - 9:30 AM</option>
+            <option value="09:30 AM - 10:00 AM">9:30 AM - 10:00 AM</option>
+            <option value="10:00 AM - 10:30 AM">10:00 AM - 10:30 AM</option>
+            <option value="10:30 AM - 11:00 AM">10:30 AM - 11:00 AM</option>
+            <option value="11:00 AM - 11:30 AM">11:00 AM - 11:30 AM</option>
+            <option value="01:00 PM - 01:30 PM">1:00 PM - 1:30 PM</option>
+            <option value="01:30 PM - 02:00 PM">1:30 PM - 2:00 PM</option>
+            <option value="02:00 PM - 02:30 PM">2:00 PM - 2:30 PM</option>
+            <option value="02:30 PM - 03:00 PM">2:30 PM - 3:00 PM</option>
+            <option value="03:00 PM - 03:30 PM">3:00 PM - 3:30 PM</option>
+            <option value="03:30 PM - 04:00 PM">3:30 PM - 4:00 PM</option>
+            <option value="04:00 PM - 04:30 PM">4:00 PM - 4:30 PM</option>
+            <option value="04:30 PM - 05:00 PM">4:30 PM - 5:00 PM</option>
+            <option value="05:00 PM - 05:30 PM">5:00 PM - 5:30 PM</option>
+            <option value="05:30 PM - 06:00 PM">5:30 PM - 6:00 PM</option>
+            <option value="06:00 PM - 06:30 PM">6:00 PM - 6:30 PM</option>
+            <option value="06:30 PM - 07:00 PM">6:30 PM - 7:00 PM</option>
+            <option value="07:00 PM - 07:30 PM">7:00 PM - 7:30 PM</option>
+            <option value="07:30 PM - 08:00 PM">7:30 PM - 8:00 PM</option>
+            <option value="08:00 PM - 08:30 PM">8:00 PM - 8:30 PM</option>
+            <option value="08:30 PM - 09:00 PM">8:30 PM - 9:00 PM</option>
+        </select>
+        <div th:if="${#fields.hasErrors('timeSlot')}" th:errors="*{timeSlot}" class="error-dialog"></div>
+
+        <label for="status">Status:</label>
+        <select th:field="*{status}" id="status" required>
+            <option value="CONFIRMED">CONFIRMED</option>
+            <option value="CANCELLED">CANCELLED</option>
+        </select>
+        <div th:if="${#fields.hasErrors('status')}" th:errors="*{status}" class="error-dialog"></div>
+
+        <button class="btn-primary" type="submit">Confirm Appointment</button>
+    </form>
+</div>
+</body>
+</html>

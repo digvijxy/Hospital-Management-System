@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hospital Bill Receipt</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .container { border: 1px solid black; padding: 20px; width: 50%; margin: auto; text-align: center; }
+        h1 { color: #333; }
+        .info { text-align: left; font-size: 16px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Hospital Bill Receipt</h1>
+    <p class="info"><strong>Patient ID:</strong> [[${bill.patientId}]]</p>
+    <p class="info"><strong>Total Amount:</strong> ₹[[${bill.totalAmount}]]</p>
+    <p class="info"><strong>Payment Status:</strong> [[${bill.paymentStatus}]]</p>
+    <p>Thank you for choosing our services!</p>
+</div>
+</body>
+</html>

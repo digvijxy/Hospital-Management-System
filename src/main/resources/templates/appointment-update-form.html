@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Appointment</title>
+</head>
+<body>
+<h2>Update Appointment</h2>
+<form th:action="@{/admin/appointment-update/{id}(id=${appointment.appointment_id})}" th:object="${appointment}" method="post">
+    <label>Date:</label>
+    <input type="date" th:field="*{appointmentDate}" required /><br/>
+    <label>Time Slot:</label>
+    <input type="text" th:field="*{timeSlot}" required /><br/>
+    <label>Status:</label>
+    <select th:field="*{status}" required>
+        <option value="CONFIRMED">CONFIRMED</option>
+        <option value="PENDING">PENDING</option>
+        <option value="CANCELLED">CANCELLED</option>
+    </select><br/>
+    <label>Patient:</label>
+    <select th:field="*{patient}" required>
+        <option th:each="p : ${patients}" th:value="${p}" th:text="${p.name}"></option>
+    </select><br/>
+    <label>Doctor:</label>
+    <select th:field="*{doctor}" required>
+        <option th:each="d : ${doctors}" th:value="${d}" th:text="${d.name}"></option>
+    </select><br/>
+    <button type="submit">Update</button>
+</form>
+</body>
+</html>

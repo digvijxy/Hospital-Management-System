@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #00bcd4;
+            color: #0d1117;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            animation: fadeInOut 4s forwards;
+        }
+
+        @keyframes fadeInOut {
+            0% {opacity: 0; transform: translateY(-20px);}
+            10% {opacity: 1; transform: translateY(0);}
+            90% {opacity: 1; transform: translateY(0);}
+            100% {opacity: 0; transform: translateY(-20px);}
+        }
+
+        .section h2 {
+            margin-top: 40px;
+            font-size: 1.4rem;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 8px;
+        }
+
+        .stat-box h4 {
+            font-size: 0.95rem;
+            margin-top: 10px;
+            font-weight: 500;
+            color: #ddd;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Toast Message -->
+<div id="toast" th:if="${success}" class="toast" th:text="${success}"></div>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="profile">
+        <img src="/images/admin-logo.png" alt="Admin Avatar">
+        <h2>Admin</h2>
+        <p>ADMIN</p>
+    </div>
+    <div class="nav-links">
+        <a href="/adminDashboard" class="active">🏠 Dashboard</a>
+        <a href="/doctorDetails">👨‍⚕️ Doctors</a>
+        <a href="/patientDetails">👥 Patients</a>
+        <a href="/allappointment">📅 Appointments</a>
+        <a href="/billing/getBillDetails">💵 Billing</a>
+        <a href="/logout">🔓 Logout</a>
+    </div>
+</div>
+
+<!-- Main Dashboard Content -->
+<div class="main">
+
+    <!-- Stats Grid -->
+    <div class="section stats-grid">
+        <div class="stat-box stat-orange">
+            <h3>Total Patients</h3>
+            <p th:text="${noOfPatients}">0</p>
+        </div>
+        <div class="stat-box stat-cyan">
+            <h3>Available Doctors</h3>
+            <p th:text="${noOfDoctors}">0</p>
+        </div>
+        <div class="stat-box stat-purple">
+            <h3>Total Appointments</h3>
+            <p th:text="${noOfAppointments}">0</p>
+        </div>
+        <div class="stat-box stat-green">
+            <h3>Total Billing</h3>
+            <p th:text="'₹' + (${totalBilling} ?: 0.0)">₹0.0</p>
+        </div>
+    </div>
+
+    <!-- More Stats: Appointments Overview -->
+    <div class="section stats-grid">
+        <div class="stat-box stat-purple">
+            <h3>Today's Appointments</h3>
+            <p th:text="${todaysAppointments}">0</p>
+        </div>
+        <div class="stat-box stat-purple">
+            <h3>Scheduled Appointments</h3>
+            <p th:text="${scheduledAppointments}">0</p>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="section">
+        <h2>Quick Actions</h2>
+        <div class="card">
+            <p>Manage key administrative tasks below.</p>
+            <div class="btn-group">
+                <a href="/doctorRegister" class="btn">Register Doctor</a>
+                <a href="/patient/register" class="btn">Register Patient</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

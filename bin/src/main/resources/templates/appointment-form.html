@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5" lang="en">
+<head>
+    <title>Appointment Form</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .card {
+            background-color: #2c2c2c;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .card img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-right: 20px;
+        }
+        .btn-primary {
+            background-color: #6200ea;
+            border: none;
+            padding: 10px 20px;
+            color: #ffffff;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .btn-danger {
+            background-color: #b00020;
+            border: none;
+            padding: 10px 20px;
+            color: #ffffff;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333333;
+            color: #ffffff;
+        }
+        .error-dialog {
+            background-color: #b00020;
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            .card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .card img {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Appointment Form</h1>
+    <div class="card">
+        <img src="https://tse1.mm.bing.net/th/id/OIP.j9-e4-JGMXDz6w15t2vIiAHaJE?cb=iwc2&rs=1&pid=ImgDetMain" alt="Doctor Logo">
+        <div>
+            <h2>Doctor Details</h2>
+            <p><strong>Name:</strong> Dr. John Doe</p>
+            <p><strong>Specialization:</strong> Cardiology</p>
+            <p><strong>Description:</strong> Dr. John Doe is a renowned cardiologist with over 20 years of experience in treating heart-related conditions.</p>
+        </div>
+    </div>
+
+        <div th:if="*{error}" class="error-dialog">
+            <p>Error: <span  th:text="*{error}"></span></p>
+        </div>
+    <form th:action="@{/schedule-appointment}" th:object="${appointment}" method="POST">
+        <div>
+            Patient Name : <span th:text="${patientName}" ></span>
+        </div>
+        <div>
+            Doctor Name : <span th:text="${doctorName}" ></span>
+        </div>
+        <div>
+            <label for="appointmentDate">Appointment Date:</label>
+            <input type="date" id="appointmentDate" th:field="*{appointmentDate}" name="appointmentDate" />
+        </div>
+        <div>
+            <label for="timeSlot">Time Slot:</label>
+            <select id="timeSlot" th:field="*{timeSlot}" name="timeSlot">
+                <option value="9:00 AM - 9:30 AM">9:00 AM - 9:30 AM</option>
+                <option value="9:30 AM - 10:00 AM">9:30 AM - 10:00 AM</option>
+                <option value="10:00 AM - 10:30 AM">10:00 AM - 10:30 AM</option>
+                <option value="10:30 AM - 11:00 AM">10:30 AM - 11:00 AM</option>
+                <option value="11:00 AM - 11:30 AM">11:00 AM - 11:30 AM</option>
+                <option value="1:00 PM - 1:30 PM">1:00 PM - 1:30 PM</option>
+                <option value="1:30 PM - 2:00 PM">1:30 PM - 2:00 PM</option>
+                <option value="2:00 PM - 2:30 PM">2:00 PM - 2:30 PM</option>
+                <option value="2:30 PM - 3:00 PM">2:30 PM - 3:00 PM</option>
+                <option value="3:00 PM - 3:30 PM">3:00 PM - 3:30 PM</option>
+                <option value="3:30 PM - 4:00 PM">3:30 PM - 4:00 PM</option>
+                <option value="4:00 PM - 4:30 PM">4:00 PM - 4:30 PM</option>
+                <option value="4:30 PM - 5:00 PM">4:30 PM - 5:00 PM</option>
+                <option value="5:00 PM - 5:30 PM">5:00 PM - 5:30 PM</option>
+                <option value="5:30 PM - 6:00 PM">5:30 PM - 6:00 PM</option>
+                <option value="6:00 PM - 6:30 PM">6:00 PM - 6:30 PM</option>
+                <option value="6:30 PM - 7:00 PM">6:30 PM - 7:00 PM</option>
+                <option value="7:00 PM - 7:30 PM">7:00 PM - 7:30 PM</option>
+                <option value="7:30 PM - 8:00 PM">7:30 PM - 8:00 PM</option>
+                <option value="8:00 PM - 8:30 PM">8:00 PM - 8:30 PM</option>
+                <option value="8:30 PM - 9:00 PM">8:30 PM - 9:00 PM</option>
+            </select>
+        </div>
+        <div>
+            <label for="status">Status:</label>
+            <select id="status" th:field="*{status}">
+                <option value="CONFIRMED">CONFIRMED</option>
+                <option value="CANCELLED">CANCELLED</option>
+            </select>
+        </div>
+        <div>
+            <button class="btn btn-primary" type="submit">Submit</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

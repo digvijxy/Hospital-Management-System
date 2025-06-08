@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Appointment Receipt</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .card {
+            background-color: #2c2c2c;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .card img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-right: 20px;
+        }
+        .btn-primary {
+            background-color: #6200ea;
+            border: none;
+            padding: 10px 20px;
+            color: #ffffff;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .btn-payment {
+            background-color: #03dac6;
+            border: none;
+            padding: 10px 20px;
+            color: #000000;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .details {
+            margin-bottom: 10px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            .card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .card img {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Appointment Receipt</h1>
+    <div class="card">
+        <img src="https://tse1.mm.bing.net/th/id/OIP.j9-e4-JGMXDz6w15t2vIiAHaJE?cb=iwc2&rs=1&pid=ImgDetMain" alt="Doctor Logo">
+        <div>
+            <h2>Doctor Details</h2>
+            <p><strong>Name:</strong> Dr. John Doe</p>
+            <p><strong>Specialization:</strong> Cardiology</p>
+            <p><strong>Description:</strong> Dr. John Doe is a renowned cardiologist with over 20 years of experience in treating heart-related conditions.</p>
+        </div>
+    </div>
+    <div class="details">
+        <p><strong>Patient Name:</strong> <span th:text="${appointment.patient.name}"></span></p>
+        <p><strong>Doctor Name:</strong> <span th:text="${appointment.doctor.name}"></span></p>
+        <p><strong>Appointment Date:</strong> <span th:text="${appointment.appointmentDate}"></span></p>
+        <p><strong>Time Slot:</strong> <span th:text="${appointment.timeSlot}"></span></p>
+        <p><strong>Status:</strong> <span th:text="${appointment.status}"></span></p>
+    </div>
+    <a th:href="@{/appointment-update/{appointment_id}(appointment_id=${appointment.appointment_id})}"><button class="btn btn-primary">Update</button></a>
+    <a th:href="@{/payment/{appointment_id}(appointment_id=${appointment.appointment_id})}"><button class="btn btn-payment">Make Payment</button></a>
+</div>
+</body>
+</html>

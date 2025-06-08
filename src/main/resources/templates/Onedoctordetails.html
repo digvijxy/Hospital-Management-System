@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Doctor Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+          --bg: #0d1117;
+          --card-bg: rgba(30, 36, 44, 0.7);
+          --border: rgba(255, 255, 255, 0.1);
+          --highlight: #ffa726;
+          --label: #00bcd4;
+          --text: #e6edf3;
+          --glass: blur(16px) saturate(180%);
+        }
+
+        * {
+          box-sizing: border-box;
+        }
+
+        body {
+          margin: 0;
+          padding: 0;
+          background-color: var(--bg);
+          font-family: 'Poppins', sans-serif;
+          color: var(--text);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 100vh;
+        }
+
+        .card {
+          width: 100%;
+          max-width: 550px;
+          padding: 35px 40px;
+          background-color: var(--card-bg);
+          backdrop-filter: var(--glass);
+          border-radius: 16px;
+          border: 1px solid var(--border);
+          box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+          animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+          font-size: 2em;
+          color: var(--highlight);
+          margin-bottom: 20px;
+          text-align: center;
+          border-bottom: 1px solid var(--border);
+          padding-bottom: 10px;
+        }
+
+        .info {
+          margin: 20px 0;
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+        }
+
+        .info-item {
+          background-color: rgba(255,255,255,0.03);
+          padding: 12px 18px;
+          border-radius: 8px;
+          border: 1px solid var(--border);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .info-item .label {
+          color: var(--label);
+          font-weight: 600;
+          font-size: 0.95rem;
+        }
+
+        .info-item .value {
+          color: var(--text);
+          font-size: 1rem;
+          font-weight: 500;
+          text-align: right;
+        }
+
+        @media (max-width: 600px) {
+          .card {
+            padding: 25px 20px;
+          }
+          .info-item {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+          .info-item .value {
+            text-align: left;
+          }
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2 th:text="${doctor.name}">Dr. John Smith</h2>
+
+    <div class="info">
+        <div class="info-item">
+            <span class="label">Doctor ID:</span>
+            <span class="value" th:text="${doctor.doctorId}">D001</span>
+        </div>
+        <div class="info-item">
+            <span class="label">Specialization:</span>
+            <span class="value" th:text="${doctor.specialization}">Cardiology</span>
+        </div>
+        <div class="info-item">
+            <span class="label">Contact Number:</span>
+            <span class="value" th:text="${doctor.contactNumber}">+91 9876543210</span>
+        </div>
+        <div class="info-item">
+            <span class="label">Availability:</span>
+            <span class="value" th:text="${doctor.availabilitySchedule}">Mon-Fri: 9 AM – 4 PM</span>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

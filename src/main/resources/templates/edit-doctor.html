@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Doctor</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #f1f1f1;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 60%;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.6);
+        }
+
+        h2 {
+            text-align: center;
+            color: #00bcd4;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #ccc;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #444;
+            border-radius: 6px;
+            background-color: #2b2b2b;
+            color: #f1f1f1;
+        }
+
+        button {
+            background-color: #00bcd4;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            background-color: #0097a7;
+        }
+
+        a.back-link {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            color: #ffa726;
+            text-decoration: none;
+        }
+
+        a.back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Edit Doctor</h2>
+    <form th:action="@{/doctors/update/{id}(id=${doctor.doctorId})}" th:object="${doctor}" method="post">
+        <label for="name">Name</label>
+        <input type="text" th:field="*{name}" id="name" required>
+
+        <label for="specialization">Specialization</label>
+        <input type="text" th:field="*{specialization}" id="specialization" required>
+
+        <label for="contactNumber">Contact Number</label>
+        <input type="tel" th:field="*{contactNumber}" id="contactNumber" required>
+
+        <label for="availabilitySchedule">Availability Schedule</label>
+        <textarea th:field="*{availabilitySchedule}" id="availabilitySchedule" rows="3" required></textarea>
+
+        <button type="submit">Update Doctor</button>
+    </form>
+
+    <a href="/doctors" class="back-link">← Back to Doctor List</a>
+</div>
+</body>
+</html>

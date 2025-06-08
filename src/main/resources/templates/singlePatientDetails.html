@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Patient Details</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            padding: 30px;
+        }
+
+        .patient-container {
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 500px;
+            margin: auto;
+            box-shadow: 0 0 10px #ffa726;
+        }
+
+        h2 {
+            color: #ffa726;
+            text-align: center;
+        }
+
+        .patient-info {
+            margin-top: 20px;
+        }
+
+        .patient-info p {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #00bcd4;
+        }
+    </style>
+</head>
+<body>
+
+<div class="patient-container">
+    <h2 th:text="${patient.name}">Patient Name</h2>
+
+    <div class="patient-info">
+        <p><span class="label">Patient ID:</span> <span th:text="${patient.patientId}"></span></p>
+        <p><span class="label">Address:</span> <span th:text="${patient.address}"></span></p>
+        <p><span class="label">Contact Number:</span> <span th:text="${patient.contactNumber}"></span></p>
+        <p><span class="label">Date of Birth:</span> <span th:text="${patient.dateOfBirth}"></span></p>
+        <p><span class="label">Gender:</span> <span th:text="${patient.gender}"></span></p>
+        <p><span class="label">Medical History:</span> <span th:text="${patient.medicalHistory}"></span></p>
+    </div>
+</div>
+
+</body>
+</html>

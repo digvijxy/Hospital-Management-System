@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Appointment Receipt</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Montserrat:wght@400;700&family=Roboto+Mono:wght@400;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dark-bg: #0d1117;
+            --container-bg: #161b22;
+            --box-bg: #1e242c; /* Slightly lighter for inner boxes */
+            --text-color: #e6edf3;
+            --accent-color: #58a6ff; /* Primary blue for highlights */
+            --secondary-accent: #8b949e; /* Muted grey for secondary text (used for labels) */
+            --button-bg: #238636; /* Green for primary actions */
+            --button-hover: #2ea043;
+            --error-bg: #da3633;
+            --border-color: #30363d;
+            --dashed-border-color: #3e444c; /* For receipt dots/lines */
+            --input-bg: #0d1117; /* Darker for input fields/select */
+
+            /* Specific receipt button colors */
+            --button-update: var(--button-bg); /* Green */
+            --button-update-hover: var(--button-hover);
+            --button-bill: var(--accent-color); /* Blue */
+            --button-bill-hover: #4090ea;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            line-height: 1.6;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            padding: 40px 0; /* Vertical padding to show background */
+        }
+
+        .main-wrapper {
+            display: flex;
+            max-width: 1200px;
+            width: 95%;
+            margin: auto; /* Centers horizontally */
+            background-color: var(--container-bg);
+            border-radius: 18px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            flex-wrap: wrap; /* Allows panels to wrap on smaller screens */
+        }
+
+        .left-panel, .right-panel {
+            padding: 40px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+
+        }
+
+        /* --- Left Panel (Doctor Details) --- */
+        .left-panel {
+            flex: 1; /* Takes up 1 part of available space */
+            min-width: 300px; /* Minimum width before wrapping */
+            background-color: var(--box-bg);
+            border-right: 1px solid var(--border-color);
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .left-panel::before { /* Background gradient */
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.1), rgba(0, 200, 255, 0.05));
+            z-index: 0;
+        }
+
+        .creative-logo { /* Background text logos */
+            position: absolute;
+            opacity: 0.1;
+            font-size: 150px;
+            color: var(--accent-color);
+            font-family: 'Montserrat', sans-serif; /* Using Montserrat as per original form */
+            font-weight: 700;
+            pointer-events: none;
+            user-select: none;
+            z-index: 0;
+        }
+        .logo-top-left { top: 20px; left: 20px; transform: rotate(-15deg); }
+        .logo-bottom-right { bottom: 20px; right: 20px; transform: rotate(15deg); }
+        .logo-center { top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 200px; opacity: 0.05;}
+
+        .doctor-info-card {
+            position: relative;
+            z-index: 1; /* Ensure text is above background logos */
+            max-width: 350px;
+        }
+
+        .doctor-info-card img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--accent-color);
+            box-shadow: 0 0 25px rgba(88, 166, 255, 0.5);
+            margin-bottom: 25px;
+        }
+
+        .doctor-info-card h2 {
+            margin: 0 0 10px;
+            color: var(--accent-color);
+            font-size: 2.2em;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .doctor-info-card p {
+            margin: 8px 0;
+            color: var(--text-color);
+            font-size: 1.1em;
+            line-height: 1.5;
+        }
+
+        .doctor-info-card p strong {
+            color: var(--secondary-accent);
+            font-weight: 600;
+        }
+
+        /* --- Right Panel (Appointment Receipt) --- */
+        .right-panel {
+            flex: 1.5; /* Larger for the receipt */
+            min-width: 450px; /* Minimum width for the receipt panel */
+            background-color: var(--container-bg);
+            position: relative; /* For the ripped paper effect */
+            padding: 40px 30px; /* Adjusted padding for receipt */
+        }
+
+        /* Ripped Paper Effect for the right panel (Receipt) */
+        .right-panel::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: repeating-linear-gradient(-45deg, var(--container-bg) 0%, var(--container-bg) 5%, transparent 5%, transparent 10%);
+            background-size: 20px 20px;
+            z-index: 2;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        }
+        .right-panel::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: repeating-linear-gradient(45deg, var(--container-bg) 0%, var(--container-bg) 5%, transparent 5%, transparent 10%);
+            background-size: 20px 20px;
+            z-index: 2;
+            box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .receipt-content { /* Wrapper to keep receipt content above pseudo-elements */
+            position: relative;
+            z-index: 1;
+        }
+
+        .receipt-logo-top {
+            text-align: center;
+            margin-bottom: 25px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.2em;
+            color: var(--secondary-accent); /* Using secondary-accent for consistency */
+            letter-spacing: 2px;
+        }
+        .receipt-logo-top span {
+            color: var(--accent-color); /* Using accent-color for consistency */
+            font-weight: 700;
+            font-size: 1.5em;
+        }
+
+        h1 { /* This H1 applies to the receipt title */
+            text-align: center;
+            color: var(--accent-color);
+            margin-bottom: 35px;
+            font-size: 2.8em; /* Slightly larger for receipt title */
+            font-weight: 700;
+            font-family: 'Merriweather', serif; /* Serif font for receipt title */
+            text-shadow: 0 3px 8px rgba(88, 166, 255, 0.3);
+            letter-spacing: 1.5px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .receipt-details {
+            margin-bottom: 30px;
+            padding: 25px 0;
+            border-top: 1px dashed var(--dashed-border-color);
+            border-bottom: 1px dashed var(--dashed-border-color);
+        }
+
+        .receipt-details p {
+            font-size: 1.15em;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+            position: relative;
+        }
+
+        .receipt-details p:last-child {
+            margin-bottom: 0;
+        }
+
+        .receipt-details strong {
+            color: var(--secondary-accent); /* Muted for labels */
+            font-weight: 400;
+            flex-shrink: 0;
+            margin-right: 15px;
+        }
+
+        .receipt-details span {
+            color: var(--text-color);
+            font-weight: 600;
+            text-align: right;
+            flex-grow: 1;
+        }
+
+        .receipt-details p::after { /* Dotted separator */
+            content: '................................................................................................................................................................................................................................................................................................';
+            white-space: nowrap;
+            overflow: hidden;
+            display: block;
+            position: absolute;
+            left: 0;
+            right: 0;
+            z-index: -1;
+            color: var(--dashed-border-color);
+            font-size: 1em;
+            line-height: 1.1;
+            top: 50%;
+            transform: translateY(-50%);
+            margin: 0 10px;
+        }
+
+        .receipt-details p > strong,
+        .receipt-details p > span {
+            background-color: var(--container-bg); /* Covers dots */
+            padding: 0 5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: white;
+        }
+
+        .btn-primary { /* Update Button */
+            background-color: var(--button-update);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--button-update-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-payment { /* Generate Bill Button */
+            background-color: var(--button-bill);
+        }
+
+        .btn-payment:hover {
+            background-color: var(--button-bill-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .receipt-footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px dashed var(--dashed-border-color);
+            font-size: 0.9em;
+            color: var(--secondary-accent);
+        }
+
+        /* --- Responsive Adjustments --- */
+        @media (max-width: 1024px) {
+            .main-wrapper {
+                flex-direction: column; /* Stack panels */
+                width: 90%;
+                margin: 20px auto; /* More margin when stacked */
+                border-radius: 18px; /* Keep rounded corners */
+            }
+
+            .left-panel, .right-panel {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color); /* Separator when stacked */
+                padding: 30px;
+                flex: none; /* Reset flex basis */
+                min-width: unset; /* Allow panels to shrink */
+            }
+
+            .left-panel {
+                min-height: 350px;
+            }
+            .right-panel {
+                min-height: 500px; /* Ensure receipt is visible */
+                padding: 30px 20px; /* Adjust padding for stacked receipt */
+            }
+
+            /* Disable ripped paper effect when stacked vertically as it can look awkward */
+            .right-panel::before, .right-panel::after {
+                display: none;
+            }
+
+            .doctor-info-card img {
+                width: 150px;
+                height: 150px;
+            }
+
+            h1 { /* Adjust main heading size for smaller screens */
+                font-size: 2.2em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .left-panel, .right-panel {
+                padding: 25px;
+            }
+
+            .doctor-info-card img {
+                width: 120px;
+                height: 120px;
+            }
+
+            .doctor-info-card h2 {
+                font-size: 1.8em;
+            }
+
+            .doctor-info-card p, .receipt-details strong, .receipt-details span, .receipt-footer {
+                font-size: 1em;
+            }
+
+            .receipt-logo-top {
+                font-size: 1em;
+            }
+            .receipt-logo-top span {
+                font-size: 1.2em;
+            }
+
+            /* Adjust receipt details for smaller screens - stacking label and value */
+            .receipt-details p {
+                font-size: 1em;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 0;
+            }
+            .receipt-details p strong, .receipt-details p span {
+                margin-bottom: 5px;
+                padding: 0;
+                background-color: transparent; /* Remove background fill for dots when stacked */
+                text-align: left;
+            }
+            .receipt-details p::after { /* Hide dots when stacked */
+                display: none;
+            }
+
+            .btn-group {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .btn {
+                width: 100%;
+                padding: 12px;
+                font-size: 1em;
+            }
+            .creative-logo { font-size: 100px; }
+            .logo-center { font-size: 150px;}
+        }
+
+        @media (max-width: 480px) {
+            .main-wrapper {
+                margin: 15px auto;
+                width: 95%;
+            }
+            .left-panel, .right-panel {
+                padding: 20px;
+            }
+            .doctor-info-card img {
+                width: 100px;
+                height: 100px;
+            }
+            .doctor-info-card h2 {
+                font-size: 1.5em;
+            }
+            .creative-logo { display: none; /* Hide on very small screens */ }
+        }
+    </style>
+</head>
+<body>
+<div class="main-wrapper">
+    <div class="left-panel">
+        <div class="creative-logo logo-top-left">MED</div>
+        <div class="creative-logo logo-center">APP</div>
+        <div class="creative-logo logo-bottom-right">CARE</div>
+
+        <div class="doctor-info-card">
+            <img src="https://tse1.mm.bing.net/th/id/OIP.j9-e4-JGMXDz6w15t2vIiAHaJE?cb=iwc2&rs=1&pid=ImgDetMain" alt="Doctor Photo">
+            <h2 th:text="${doctorName}">Dr. Emily White</h2>
+            <p><strong>Specialization: </strong><span th:text="${specialization}">Pediatrics</span></p>
+            <p><strong>Availability:</strong> <span th:text="${availability}">Mon-Fri, 9 AM - 5 PM</span></p>
+        </div>
+    </div>
+
+    <div class="right-panel">
+        <div class="receipt-content">
+            <div class="receipt-logo-top">
+                — <span>HEALTH+</span> APPOINTMENT —
+            </div>
+            <h1>Appointment Confirmation</h1>
+
+            <div class="receipt-details">
+                <p>
+                    <strong>Patient Name:</strong>
+                    <span th:text="${appointment.patient.name}">John Smith</span>
+                </p>
+                <p>
+                    <strong>Doctor Name:</strong>
+                    <span th:text="${appointment.doctor.name}">Dr. Emily White</span>
+                </p>
+                <p>
+                    <strong>Appointment Date:</strong>
+                    <span th:text="${#dates.format(appointment.appointmentDate, 'dd MMMM yyyy')}">05 June 2025</span>
+                </p>
+                <p>
+                    <strong>Time Slot:</strong>
+                    <span th:text="${appointment.timeSlot}">10:00 AM - 10:30 AM</span>
+                </p>
+                <p>
+                    <strong>Status:</strong>
+                    <span th:text="${appointment.status}">CONFIRMED</span>
+                </p>
+            </div>
+
+            <div class="btn-group">
+                <a th:href="@{/appointment-update/{appointment_id}(appointment_id=${appointment.appointment_id})}">
+                    <button class="btn btn-primary">Update Appointment</button>
+                </a>
+                <a th:href="@{/billing/generateBill(patientId=${appointment.patient.patientId}, name=${appointment.patient.name}, doctor=${appointment.doctor.name}, date=${appointment.appointmentDate}, timeSlot=${appointment.timeSlot}, status=${appointment.status})}">
+                    <button class="btn btn-payment">Generate Bill</button>
+                </a>
+            </div>
+
+            <div class="receipt-footer">
+                Thank you for choosing HEALTH+.<br>
+                Please keep this receipt for your records.
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

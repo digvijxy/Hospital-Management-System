@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Bill Not Found</title>
+    <style>
+        /* Dark Theme */
+        body {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+
+        .container {
+            background-color: #2d2d2d;
+            padding: 40px;
+            border-radius: 10px;
+            width: 50%;
+            margin: auto;
+            box-shadow: 0px 0px 15px rgba(255, 165, 0, 0.5);
+        }
+
+        h2 {
+            color: #FF5555; /* Red */
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        .home-btn {
+            background-color: #FFA500; /* Orange */
+        }
+
+        .home-btn:hover {
+            background-color: #cc8400; /* Darker Orange */
+        }
+
+        .back-btn {
+            background-color: #008CBA; /* Blue */
+        }
+
+        .back-btn:hover {
+            background-color: #005f80; /* Darker Blue */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Bill Not Found</h2>
+    <p>Oops! We couldn't find the bill you're looking for.</p>
+
+    <!-- ✅ Buttons to navigate back to home or billing -->
+    <div class="button-container">
+        <a href="/" class="btn home-btn">Go to Home</a>
+        <a href="/billing" class="btn back-btn">Back to Billing</a>
+    </div>
+</div>
+
+</body>
+</html>

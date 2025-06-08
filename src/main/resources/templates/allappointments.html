@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>All Appointments - Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Montserrat:wght@400;700;900&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* --- CSS Variables for Theme and Consistency (Copied from your dashboard theme) --- */
+        :root {
+            --dark-bg: #0d1117;             /* Deep dark background */
+            --header-bg: #161b22;           /* Slightly lighter header background */
+            --card-bg: #1e242c;             /* Card background */
+            --border-color: #30363d;        /* Subtle border for elements */
+            --text-color: #e6edf3;          /* Light text for readability */
+            --accent-blue: #58a6ff;         /* Primary blue accent */
+            --accent-green: #238636;        /* Green for success/add/billing */
+            --accent-green-hover: #2ea043;
+            --accent-orange: #ffa726;       /* Orange for patients */
+            --accent-orange-hover: #fb8c00;
+            --accent-cyan: #00bcd4;         /* Cyan for doctors */
+            --accent-cyan-hover: #0097a7;
+            --accent-purple: #ab47bc;       /* Purple for appointments */
+            --accent-purple-hover: #9c27b0;
+            --logout-bg: #82cfff;           /* Lighter blue for logout */
+            --logout-hover: #4da3ff;
+            --shadow-light: rgba(0, 0, 0, 0.4);
+            --shadow-medium: rgba(0, 0, 0, 0.6);
+            --shadow-heavy: rgba(0, 0, 0, 0.8);
+            --action-red: #e63946; /* Directly defined for danger button */
+            --action-red-hover: #c42b37;
+        }
+
+        /* --- Global Styles --- */
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeInSlideUp {
+            from { opacity: 0; transform: translateY(10px); } /* Slightly less movement */
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Header Section --- */
+        .header {
+            background-color: var(--header-bg);
+            padding: 20px 20px; /* Reduced padding */
+            text-align: center;
+            border-bottom: 1px solid var(--border-color); /* Thinner border */
+            box-shadow: 0 2px 10px var(--shadow-light); /* Lighter shadow */
+            animation: fadeInSlideUp 0.6s ease-out; /* Faster animation */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 1200px;
+            padding: 0 15px; /* Reduced padding */
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .header .logo {
+            height: 40px; /* Smaller logo */
+            width: 40px;
+            margin-right: 15px; /* Reduced margin */
+            background-color: var(--accent-blue);
+            border-radius: 6px; /* Slightly smaller radius */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-bg);
+            font-weight: bold;
+            font-size: 1.2em; /* Smaller font */
+            flex-shrink: 0;
+        }
+        .header .logo img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 6px; /* Match logo container radius */
+        }
+
+        .header h1 {
+            margin: 0;
+            color: var(--accent-purple);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800; /* Slightly less bold */
+            font-size: 2.2em; /* Smaller H1 */
+            text-shadow: 0 2px 8px rgba(171, 71, 188, 0.2); /* Lighter shadow */
+            letter-spacing: 1px; /* Tighter letter spacing */
+            flex-grow: 1;
+        }
+
+        .header h2 {
+            margin: 5px 0 0; /* Reduced margin */
+            color: var(--text-color);
+            font-size: 0.9em; /* Smaller H2 */
+            opacity: 0.7; /* More subtle */
+            font-weight: 300; /* Lighter weight */
+        }
+
+        /* --- Main Content Container --- */
+        .container {
+            max-width: 1300px; /* Slightly narrower */
+            margin: 30px auto; /* Reduced margin */
+            padding: 15px; /* Reduced padding */
+            flex-grow: 1;
+            animation: fadeInSlideUp 0.6s ease-out 0.1s backwards; /* Faster animation */
+        }
+
+        /* --- Table Styles --- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--header-bg); /* Use header-bg for table background */
+            border: 1px solid var(--border-color);
+            box-shadow: 0 6px 15px var(--shadow-medium); /* Slightly lighter shadow */
+            border-radius: 12px; /* Slightly smaller radius */
+            overflow: hidden;
+        }
+
+        thead {
+            background-color: var(--card-bg); /* Use card-bg for table header */
+        }
+
+        th, td {
+            padding: 14px 20px; /* Reduced padding */
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            color: var(--accent-blue);
+            font-size: 0.95em; /* Smaller font */
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.3px; /* Tighter letter spacing */
+            position: relative;
+        }
+
+        th i {
+            margin-right: 6px; /* Reduced margin */
+            color: var(--accent-blue);
+            font-size: 0.9em; /* Smaller icon */
+        }
+
+        td {
+            color: var(--text-color);
+            font-size: 0.9em; /* Smaller data font */
+        }
+
+        tr:hover {
+            background-color: var(--card-bg); /* Card-bg on hover */
+            transition: background-color 0.2s ease; /* Faster transition */
+        }
+
+        /* --- Button Styles --- */
+        .btn {
+            padding: 8px 14px; /* Reduced padding */
+            text-decoration: none;
+            border-radius: 6px; /* Smaller radius */
+            font-weight: 500; /* Slightly lighter font weight */
+            transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease; /* Faster transitions */
+            display: inline-flex;
+            align-items: center;
+            gap: 6px; /* Reduced gap */
+            font-size: 0.85em; /* Smaller font size */
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25); /* Lighter shadow */
+        }
+
+        .btn i {
+            font-size: 0.9em; /* Smaller icon */
+        }
+
+        .btn-primary {
+            background-color: var(--accent-green);
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-green-hover);
+            transform: translateY(-1px) scale(1.01); /* Subtle hover effect */
+            box-shadow: 0 3px 8px rgba(35, 134, 54, 0.4); /* Lighter shadow */
+        }
+
+        .btn-danger {
+            background-color: var(--action-red);
+            color: #ffffff;
+        }
+
+        .btn-danger:hover {
+            background-color: var(--action-red-hover);
+            transform: translateY(-1px) scale(1.01); /* Subtle hover effect */
+            box-shadow: 0 3px 8px rgba(230, 57, 70, 0.4); /* Lighter shadow */
+        }
+
+        /* --- Responsive Design --- */
+        @media screen and (max-width: 1024px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            .header h2 {
+                font-size: 0.85em;
+            }
+            th, td {
+                padding: 12px 18px;
+            }
+            .btn {
+                padding: 7px 12px;
+                font-size: 0.8em;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .header {
+                padding: 15px;
+            }
+            .header .logo {
+                margin-bottom: 10px;
+                height: 35px;
+                width: 35px;
+            }
+            .header h1 {
+                font-size: 1.8em;
+            }
+            .header h2 {
+                font-size: 0.8em;
+            }
+
+            .container {
+                margin: 20px auto;
+                padding: 10px;
+            }
+
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+
+            thead {
+                display: none; /* Hide table headers on mobile */
+            }
+
+            tr {
+                margin-bottom: 18px; /* Reduced margin */
+                border: 1px solid var(--border-color);
+                border-radius: 10px; /* Smaller radius */
+                padding: 12px; /* Reduced padding */
+                background-color: var(--header-bg);
+                box-shadow: 0 4px 10px var(--shadow-light); /* Lighter shadow */
+            }
+
+            td {
+                padding: 10px 12px; /* Reduced padding */
+                position: relative;
+                text-align: right;
+                padding-left: 45%; /* Space for data-label */
+                border-bottom: none;
+            }
+
+            td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 12px;
+                width: calc(45% - 24px);
+                color: var(--accent-blue);
+                font-weight: 600;
+                text-align: left;
+                font-family: 'Montserrat', sans-serif;
+                font-size: 0.85em; /* Smaller label font */
+            }
+
+            td:last-child {
+                border-bottom: 0;
+                padding-bottom: 0; /* Remove extra padding below actions */
+            }
+
+            .btn-container {
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 8px; /* Reduced gap */
+                margin-top: 10px; /* Reduced margin */
+            }
+            .btn {
+                flex: 1 1 calc(50% - 8px);
+                max-width: 160px; /* Slightly smaller max-width */
+                justify-content: center;
+                font-size: 0.75em; /* Even smaller button font */
+                padding: 6px 10px; /* Smaller button padding */
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+            .header h2 {
+                font-size: 0.75em;
+            }
+            .container {
+                padding: 8px;
+            }
+            tr {
+                padding: 8px;
+                margin-bottom: 15px;
+            }
+            td {
+                padding: 8px 10px;
+                padding-left: 40%;
+            }
+            td::before {
+                left: 10px;
+                width: calc(40% - 20px);
+                font-size: 0.8em;
+            }
+            .btn {
+                font-size: 0.7em;
+                padding: 5px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="header-content">
+
+        <div>
+            <h1>Appointment Schedule</h1>
+            <h2>Efficiently manage all patient bookings.</h2>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <table>
+        <thead>
+        <tr>
+            <th><i class="fas fa-id-card"></i> ID</th>
+            <th><i class="fas fa-user-injured"></i> Patient</th>
+            <th><i class="fas fa-user-md"></i> Doctor</th>
+            <th><i class="fas fa-calendar-alt"></i> Date</th>
+            <th><i class="fas fa-clock"></i> Time</th>
+            <th><i class="fas fa-info-circle"></i> Status</th>
+            <th><i class="fas fa-cogs"></i> Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="appointment : ${appointments}">
+            <td data-label="ID" th:text="${appointment.appointment_id}">1</td>
+            <td data-label="Patient" th:text="${appointment.patient.name}">John Doe</td>
+            <td data-label="Doctor" th:text="${appointment.doctor.name}">Dr. Smith</td>
+            <td data-label="Date" th:text="${#dates.format(appointment.appointmentDate, 'yyyy-MM-dd')}">2025-06-01</td>
+            <td data-label="Time" th:text="${appointment.timeSlot}">10:00 AM - 11:00 AM</td>
+            <td data-label="Status" th:text="${appointment.status}">Confirmed</td>
+            <td data-label="Actions">
+                <div class="btn-container">
+                    <a th:href="@{/admin/appointment-delete/{id}(id=${appointment.appointment_id})}" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i> Delete
+                    </a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

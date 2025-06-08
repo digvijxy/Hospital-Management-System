@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Patient Details - Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* --- CSS Variables for Theme and Consistency --- */
+        :root {
+            --dark-bg: #0d1117;
+            --header-bg: #161b22;
+            --card-bg: #1e242c;
+            --table-row-bg: #212830;
+            --border-color: #30363d;
+            --text-color: #e6edf3;
+            --accent-orange: #ffa726;
+            --accent-orange-hover: #fb8c00;
+            --shadow-light: rgba(0, 0, 0, 0.4);
+            --shadow-medium: rgba(0, 0, 0, 0.6);
+            --shadow-heavy: rgba(0, 0, 0, 0.8);
+            --action-red: #e63946;
+            --action-red-hover: #c42b37;
+            --btn-edit: #3498db;
+            --btn-edit-hover: #2980b9;
+            --btn-view: #2ecc71;
+            --btn-view-hover: #27ae60;
+            --btn-add: #238636;
+            --btn-add-hover: #2ea043;
+        }
+
+        /* --- Global Styles --- */
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 20px;
+            box-sizing: border-box;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeInSlideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* --- Header Section --- */
+        .header {
+            background-color: var(--header-bg);
+            padding: 25px 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px var(--shadow-heavy);
+            animation: fadeInSlideUp 0.6s ease-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header .header-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 1200px;
+            padding: 0 15px;
+            box-sizing: border-box;
+            z-index: 1;
+        }
+
+        .header .logo-icon {
+            font-size: 3.5em;
+            color: var(--accent-orange);
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(255, 167, 38, 0.4);
+            animation: fadeIn 1s ease-out;
+        }
+
+        .header h1 {
+            margin: 0 0 5px 0;
+            color: var(--accent-orange);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 2.8em;
+            text-shadow: 0 0 15px rgba(255, 167, 38, 0.3);
+            letter-spacing: 1.5px;
+        }
+
+        .header h2 {
+            margin: 0;
+            color: var(--text-color);
+            font-size: 1.1em;
+            opacity: 0.8;
+            font-weight: 400;
+            text-align: center;
+            max-width: 80%;
+            margin-bottom: 10px;
+        }
+
+        /* Subtle background icon for header */
+        .header::before {
+            content: "\f479"; /* User-injured icon or similar for patients */
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 15em;
+            color: var(--accent-orange);
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* --- Main Content Container (Card) --- */
+        .container-card {
+            background-color: var(--header-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px var(--shadow-heavy);
+            padding: 30px;
+            max-width: 1400px;
+            margin: 40px auto;
+            flex-grow: 1;
+            animation: fadeInSlideUp 0.8s ease-out 0.2s backwards;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        /* --- Table Styling --- */
+        .table-wrapper {
+            overflow-x: auto; /* Enables horizontal scrolling for tables on small screens */
+            -webkit-overflow-scrolling: touch;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+        }
+
+        table {
+            width: 100%;
+            min-width: 700px; /* Reduced min-width to prevent overflow */
+            border-collapse: separate;
+            border-spacing: 0;
+            background-color: var(--card-bg);
+        }
+
+        thead {
+            background-color: var(--table-row-bg);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        th, td {
+            padding: 12px 15px; /* Reduced padding for more compactness */
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-color);
+            font-size: 0.9em; /* Slightly smaller font size */
+        }
+
+        th {
+            color: var(--accent-orange);
+            font-size: 0.95em; /* Adjusted font size */
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        th i {
+            margin-right: 6px; /* Reduced margin */
+            color: var(--accent-orange);
+            font-size: 0.85em;
+        }
+
+        /* Specific border-radius for table corners */
+        table thead tr:first-child th:first-child { border-top-left-radius: 12px; }
+        table thead tr:first-child th:last-child { border-top-right-radius: 12px; }
+        table tbody tr:last-child td:first-child { border-bottom-left-radius: 12px; }
+        table tbody tr:last-child td:last-child { border-bottom-right-radius: 12px; }
+
+        tr:nth-child(even) {
+            background-color: var(--table-row-bg);
+        }
+
+        tr:hover {
+            background-color: #2a333d;
+            transition: background-color 0.2s ease;
+        }
+
+        /* --- Buttons --- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 10px; /* Reduced padding for all buttons */
+            border: none;
+            border-radius: 5px; /* Slightly smaller border radius */
+            text-decoration: none;
+            color: #fff;
+            font-size: 0.8rem; /* Smaller font size for buttons */
+            font-weight: 600;
+            margin: 2px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* Lighter shadow */
+        }
+
+        .btn i {
+            margin-right: 4px; /* Reduced margin */
+            font-size: 0.8em;
+        }
+
+        .btn-edit {
+            background-color: var(--btn-edit);
+        }
+
+        .btn-edit:hover {
+            background-color: var(--btn-edit-hover);
+            transform: translateY(-1px); /* Less lift on hover */
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .btn-view {
+            background-color: var(--btn-view);
+        }
+
+        .btn-view:hover {
+            background-color: var(--btn-view-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 4px; /* Reduced gap */
+        }
+        td.action-buttons {
+            text-align: center;
+        }
+
+        /* --- Add Patient Button --- */
+        .add-patient-container {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px; /* Slightly reduced margin */
+        }
+
+        .btn-add {
+            background-color: var(--btn-add);
+            padding: 10px 18px; /* Reduced padding */
+            font-size: 0.95rem; /* Slightly smaller font size */
+            border-radius: 6px; /* Slightly smaller border radius */
+            box-shadow: 0 3px 12px rgba(35, 134, 54, 0.4);
+        }
+
+        .btn-add:hover {
+            background-color: var(--btn-add-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(35, 134, 54, 0.6);
+        }
+
+        /* Empty state for the table */
+        .no-patients-message {
+            text-align: center;
+            padding: 30px; /* Reduced padding */
+            font-size: 1em;
+            color: var(--text-color);
+            opacity: 0.8;
+            background-color: var(--table-row-bg);
+            border-radius: 8px;
+            border: 1px dashed var(--border-color);
+            margin: 15px 0; /* Reduced margin */
+        }
+
+        .no-patients-message i {
+            font-size: 1.6em; /* Slightly smaller icon */
+            color: var(--accent-orange);
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        /* --- Responsive Design --- */
+        @media screen and (max-width: 1024px) {
+            .header h1 { font-size: 2.2em; }
+            .header h2 { font-size: 1em; }
+            .header .logo-icon { font-size: 3em; }
+            .header::before { font-size: 12em; }
+
+            .container-card { padding: 20px; max-width: 98%; margin: 25px auto; border-radius: 12px; } /* Increased max-width */
+            .table-wrapper { border-radius: 10px; }
+            th, td { padding: 10px 12px; font-size: 0.85em; } /* Further reduced padding */
+            th { font-size: 0.9em; }
+            table thead tr:first-child th:first-child { border-top-left-radius: 10px; }
+            table thead tr:first-child th:last-child { border-top-right-radius: 10px; }
+            table tbody tr:last-child td:first-child { border-bottom-left-radius: 10px; }
+            table tbody tr:last-child td:last-child { border-bottom-right-radius: 10px; }
+
+            .btn {
+                padding: 5px 8px; /* More compact buttons */
+                font-size: 0.75rem;
+            }
+            .btn i { margin-right: 4px; }
+
+            .btn-add {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            body { padding-bottom: 10px; }
+            .header { padding: 18px 10px; }
+            .header .logo-icon { font-size: 2.5em; margin-bottom: 6px; }
+            .header h1 { font-size: 1.6em; letter-spacing: 0.8px; }
+            .header h2 { font-size: 0.85em; max-width: 95%; margin-bottom: 4px; }
+            .header::before { font-size: 8em; }
+
+            .container-card {
+                margin: 20px auto;
+                padding: 15px;
+                border-radius: 10px;
+            }
+
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+
+            thead {
+                display: none;
+            }
+
+            tr {
+                margin-bottom: 15px; /* Slightly less margin */
+                border: 1px solid var(--border-color);
+                border-radius: 8px; /* Slightly smaller radius */
+                padding: 12px; /* Reduced padding */
+                background-color: var(--card-bg);
+                box-shadow: 0 3px 10px var(--shadow-light);
+            }
+
+            tr:hover {
+                background-color: #2a333d;
+            }
+
+            td {
+                padding: 8px 10px; /* Further reduced padding */
+                text-align: right;
+                padding-left: 45%; /* Adjusted padding-left for labels */
+                border-bottom: 1px dashed var(--border-color);
+                font-size: 0.85em; /* Slightly smaller font size */
+                min-height: 36px; /* Slightly less min-height */
+            }
+
+            td.action-buttons {
+                justify-content: flex-end;
+                padding-left: 10px; /* Reduced padding-left for action buttons */
+                border-bottom: none;
+            }
+
+            td::before {
+                left: 10px;
+                width: calc(45% - 20px); /* Adjusted width */
+                font-size: 0.8em; /* Slightly smaller font size */
+            }
+
+            td.action-buttons::before {
+                display: none;
+            }
+
+            td:last-child {
+                border-bottom: 0;
+            }
+
+            .no-patients-message {
+                padding: 20px;
+                font-size: 0.9em;
+            }
+
+            .add-patient-container {
+                margin-top: 15px;
+            }
+            .btn-add {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .header { padding: 12px 8px; }
+            .header .logo-icon { font-size: 2em; }
+            .header h1 { font-size: 1.3em; }
+            .header h2 { font-size: 0.7em; }
+            .header::before { font-size: 5em; }
+
+            .container-card { padding: 10px; margin: 15px auto; border-radius: 6px; }
+            tr { padding: 8px; margin-bottom: 12px; border-radius: 6px; }
+            td { padding: 6px 8px; padding-left: 40%; font-size: 0.8em; } /* Further reduced padding and width */
+            td::before { left: 8px; width: calc(40% - 16px); font-size: 0.75em; }
+
+            .btn {
+                padding: 4px 6px;
+                font-size: 0.65rem;
+                margin: 1px;
+            }
+            .btn i { margin-right: 3px; }
+
+            .add-patient-container {
+                margin-top: 10px;
+            }
+            .btn-add {
+                padding: 7px 12px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="header-content">
+        <i class="fas fa-hospital-user logo-icon"></i>
+        <h1>Patient Directory</h1>
+        <h2>Comprehensive details for all registered patients.</h2>
+    </div>
+</header>
+
+<div class="container-card">
+    <div class="add-patient-container">
+        <a href="/patientRegister" class="btn btn-add"><i class="fas fa-user-plus"></i> Add New Patient</a>
+    </div>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+            <tr>
+                <th><i class="fas fa-id-card"></i> Patient ID</th>
+                <th><i class="fas fa-user"></i> Name</th>
+                <th><i class="fas fa-map-marker-alt"></i> Address</th>
+                <th><i class="fas fa-phone-alt"></i> Contact Number</th>
+                <th><i class="fas fa-calendar-alt"></i> DOB</th> <th><i class="fas fa-venus-mars"></i> Gender</th>
+                <th><i class="fas fa-notes-medical"></i> Medical History</th>
+                <th><i class="fas fa-cogs"></i> Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(patients)}">
+                <td colspan="8">
+                    <div class="no-patients-message">
+                        <i class="fas fa-info-circle"></i>
+                        No patients found. Please register new patients to view their details here.
+                    </div>
+                </td>
+            </tr>
+            <tr th:each="patient : ${patients}">
+                <td data-label="Patient ID" th:text="${patient.patientId}">PT001</td>
+                <td data-label="Name" th:text="${patient.name}">Jane Doe</td>
+                <td data-label="Address" th:text="${patient.address}">123 Hospital Rd, Bengaluru</td>
+                <td data-label="Contact Number" th:text="${patient.contactNumber}">+91 9988776655</td>
+                <td data-label="Date of Birth" th:text="${patient.dateOfBirth}">1990-05-15</td>
+                <td data-label="Gender" th:text="${patient.gender}">Female</td>
+                <td data-label="Medical History" th:text="${patient.medicalHistory}">Asthma, Penicillin Allergy</td>
+                <td class="action-buttons" data-label="Actions">
+                    <a th:href="@{'/patients/edit/' + ${patient.patientId}}" class="btn btn-edit"><i class="fas fa-edit"></i> Edit</a>
+                    <a th:href="@{'/patients/' + ${patient.patientId}}" class="btn btn-view"><i class="fas fa-eye"></i> View</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

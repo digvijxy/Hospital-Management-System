@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Doctor Registration</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .form-container {
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0, 188, 212, 0.5);
+            width: 450px;
+        }
+        h2 {
+            text-align: center;
+            color: #00bcd4;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border-radius: 6px;
+            border: none;
+            background-color: #333;
+            color: #ffffff;
+        }
+        .submit-btn {
+            background-color: #00bcd4;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            width: 100%;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        .submit-btn:hover {
+            background-color: #0097a7;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Doctor Registration</h2>
+    <form action="/doctor/register" method="post">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="specialization">Specialization:</label>
+        <input type="text" id="specialization" name="specialization" required>
+
+        <label for="contactNumber">Contact Number:</label>
+        <input type="text" id="contactNumber" name="contactNumber" required>
+
+        <label for="availabilitySchedule">Availability Schedule:</label>
+        <textarea id="availabilitySchedule" name="availabilitySchedule"></textarea>
+
+        <button type="submit" class="submit-btn">Submit</button>
+    </form>
+</div>
+
+</body>
+</html>

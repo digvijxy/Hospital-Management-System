@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+          margin: 0;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          background-color: #121212;
+          color: #f1f1f1;
+        }
+
+        .header {
+          padding: 20px;
+          text-align: center;
+          border-bottom: 2px solid #333;
+          position: relative;
+        }
+
+        .header h1 {
+          margin: 0;
+          color: #82cfff;
+          font-weight: bold;
+        }
+
+        .header p {
+          margin: 5px 0 0;
+          color: #ffffff;
+        }
+
+        .logout-button {
+          position: absolute;
+          right: 20px;
+          top: 20px;
+          padding: 10px 15px;
+          background-color: #82cfff;
+          color: #000;
+          text-decoration: none;
+          border-radius: 8px;
+          font-weight: bold;
+          transition: background-color 0.2s;
+        }
+
+        .logout-button:hover {
+          background-color: #4da3ff;
+        }
+
+        .dashboard {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          padding: 30px;
+          gap: 20px;
+        }
+
+        .card {
+          background-color: #1e1e1e;
+          border: 1px solid #333;
+          border-radius: 12px;
+          box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+          width: 300px;
+          padding: 20px;
+          text-align: center;
+          transition: transform 0.2s;
+        }
+
+        .card:hover {
+          transform: scale(1.03);
+        }
+
+        .card h2 {
+          margin-bottom: 10px;
+          color: #ffa726;
+        }
+
+        .card p {
+          font-size: 18px;
+          color: #ccc;
+        }
+
+        .card a {
+          display: inline-block;
+          margin-top: 10px;
+          padding: 10px 15px;
+          text-decoration: none;
+          border-radius: 8px;
+          transition: background-color 0.2s;
+          font-weight: bold;
+        }
+
+        .card a.patient-btn {
+          background-color: #ffa726;
+          color: #000;
+        }
+
+        .card a.patient-btn:hover {
+          background-color: #fb8c00;
+        }
+
+        .card a.doctor-btn {
+          background-color: #00bcd4;
+          color: #000;
+        }
+
+        .card a.doctor-btn:hover {
+          background-color: #0097a7;
+        }
+
+        .card.center-count p {
+          font-weight: bold;
+          font-size: 24px;
+          color: #ffa726;
+          margin-top: 30px;
+        }
+
+        .card.center-count.doctor p {
+          color: #00bcd4;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>Welcome to Admin Dashboard</h1>
+    <p th:text="${message}"></p>
+    <a href="/logout" class="logout-button">Logout</a>
+</div>
+
+<div class="dashboard">
+    <div class="card">
+        <h2>Patient Details</h2>
+        <p>View, update, and manage patient records.</p>
+        <a href="/patientDetails" class="patient-btn">Patient Details</a>
+    </div>
+
+    <div class="card">
+        <h2>Doctor Details</h2>
+        <p>Access doctor information and schedules.</p>
+        <a href="/doctorDetails" class="doctor-btn">Doctor Details</a>
+    </div>
+
+    <div class="card center-count">
+        <h2>No. of Patients</h2>
+        <p th:text="${noOfPatients}">0</p>
+    </div>
+
+    <div class="card center-count doctor">
+        <h2>No. of Doctors</h2>
+        <p th:text="${noOfDoctors}">0</p>
+    </div>
+
+    <div class="card">
+        <h2>Add New Patient</h2>
+        <p>Create a new patient profile in the system.</p>
+        <a href="/patientRegister" class="patient-btn">Add Patient</a>
+    </div>
+
+    <div class="card">
+        <h2>Add New Doctor</h2>
+        <p>Add a new doctor to the hospital database.</p>
+        <a href="/doctorRegister" class="doctor-btn">Add Doctor</a>
+    </div>
+</div>
+</body>
+</html>
