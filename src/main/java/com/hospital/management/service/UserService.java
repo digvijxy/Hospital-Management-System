@@ -25,7 +25,7 @@ public class UserService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(
                 user.getUserName(),
                 user.getPassword(),
-                Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name())) // Remove "ROLE_" prefix
+                Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name()))
         );
     }
 

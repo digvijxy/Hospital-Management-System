@@ -12,7 +12,6 @@ public interface DoctorService {
     void saveDoctor(Doctor doctor);
     List<Doctor> getAllDoctors();
 
-    void saveDoctorWithUser(Doctor doctor);
     boolean isDoctorAvailableToday(Doctor doctor);
 
     List<String> getAvailabilitySlots(int doctorId);

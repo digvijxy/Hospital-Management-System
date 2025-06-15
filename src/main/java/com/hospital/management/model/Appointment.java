@@ -29,7 +29,7 @@ public class Appointment {
     private Doctor doctor;
 
     @NotNull(message = "Appointment date is required")
-//    @FutureOrPresent(message = "Appointment date cannot be in the past")
+    @FutureOrPresent(message = "Appointment date cannot be in the past")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date appointmentDate;
 

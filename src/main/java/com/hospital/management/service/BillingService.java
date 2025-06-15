@@ -14,13 +14,11 @@ public class BillingService {
     @Autowired
     private BillRepository billRepository;
 
-    // 1️⃣ Generate a new bill
     public Bill generateBill(Bill billData) {
         return billRepository.save(billData);
     }
 
 
-    // 2️⃣ Retrieve bill details by ID
     public Optional<Bill> getBillDetails(int billId) {
         return billRepository.findById(billId);
     }

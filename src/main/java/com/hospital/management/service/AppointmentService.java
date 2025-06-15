@@ -32,70 +32,44 @@ public class AppointmentService {
 
       @Autowired
       private DoctorRepository doctorRepository;
-       public List<Appointment> getAppointmentsByPatientId(int patientId){
-        return appointmentRepository.findByPatient_PatientId(patientId);
-        }
+//       public List<Appointment> getAppointmentsByPatientId(int patientId){
+//        return appointmentRepository.findByPatient_PatientId(patientId);
+//        }
        
-       public List<Appointment> getAppointmentsByDoctorId(int patientId){
-           return appointmentRepository.findByDoctor_DoctorId(patientId);
-           }
+//       public List<Appointment> getAppointmentsByDoctorId(int patientId){
+//           return appointmentRepository.findByDoctor_DoctorId(patientId);
+//           }
     public List<Appointment> getTodaysAppointmentsForDoctor(int doctorId) {
 
-        System.out.println(doctorId);
+       // System.out.println(doctorId);
         Doctor doctor = doctorRepository.findById(doctorId).orElse(null);
         if (doctor == null) return List.of();
 
-        Date today = Date.valueOf(java.time.LocalDate.now()); // optional: truncate time if needed
+        Date today = Date.valueOf(java.time.LocalDate.now());
         return appointmentRepository.findByDoctorAndAppointmentDate(doctor, today);
     }
 
-    public Map<Appointment.Status, Long> getTodayAppointmentStatsForDoctor(int doctorId) {
-        Doctor doctor = doctorRepository.findById(doctorId).orElse(null);
-        if (doctor == null) return Collections.emptyMap();
-
-        Date today = Date.valueOf(java.time.LocalDate.now());
-        List<Appointment> appointments = appointmentRepository.findByDoctorAndAppointmentDate(doctor, today);
-
-        return appointments.stream()
-                .collect(Collectors.groupingBy(Appointment::getStatus, Collectors.counting()));
-    }
+//    public Map<Appointment.Status, Long> getTodayAppointmentStatsForDoctor(int doctorId) {
+//        Doctor doctor = doctorRepository.findById(doctorId).orElse(null);
+//        if (doctor == null) return Collections.emptyMap();
+//
+//        Date today = Date.valueOf(java.time.LocalDate.now());
+//        List<Appointment> appointments = appointmentRepository.findByDoctorAndAppointmentDate(doctor, today);
+//
+//        return appointments.stream()
+//                .collect(Collectors.groupingBy(Appointment::getStatus, Collectors.counting()));
+//    }
     public long getTotalAppointments() {
         return appointmentRepository.count();
     }
 
-//    public List<Patient> getExpiredAppointmentsForDoctor(int doctorId) {
-//           System.out.println(doctorId +"Inside service");
-//        List<Appointment> appointments = appointmentRepository.findByDoctor_DoctorId(doctorId);
-//        System.out.println(appointments);
-//        List<Patient> patients= appointments.stream()
-//                .filter(appointment ->
-//                        appointment.getAppointmentDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-//                                .isEqual(LocalDate.now()) && hasTimePassed(appointment.getTimeSlot())
-//                )
-//                .map(Appointment::getPatient)
-//                .peek(System.out::println)
-//                .distinct()
-//                .collect(Collectors.toList());
-//        System.out.println(patients);
-//         return patients;
-//    }
-//
-//    private boolean hasTimePassed(String timeSlot) {
-//        // Extract the first time from the range
-//        String startTime = timeSlot.split("-")[0].trim();
-//
-//        startTime = startTime.replaceAll("\\s+", " ");
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
-//        LocalTime appointmentTime = LocalTime.parse(startTime, formatter);
-//        return LocalTime.now().isAfter(appointmentTime);
-//    }
 
     private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a", Locale.ENGLISH);
 
-    private LocalTime extractStartTime(String timeSlot) {
-        String startTimeStr = timeSlot.split(" - ")[0].trim(); // e.g. "09:00 AM"
-        return LocalTime.parse(startTimeStr, timeFormatter);
-    }
+//    private LocalTime extractStartTime(String timeSlot) {
+//        String startTimeStr = timeSlot.split(" - ")[0].trim(); // e.g. "09:00 AM"
+//        return LocalTime.parse(startTimeStr, timeFormatter);
+//    }
 
     private LocalTime extractEndTime(String timeSlot) {
         String endTimeStr = timeSlot.split(" - ")[1].trim(); // e.g. "09:30 AM"

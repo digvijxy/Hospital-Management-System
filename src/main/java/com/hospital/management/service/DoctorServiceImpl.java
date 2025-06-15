@@ -4,11 +4,9 @@ import com.hospital.management.model.Doctor;
 import com.hospital.management.model.User;
 import com.hospital.management.repository.DoctorRepository;
 import com.hospital.management.repository.UserRepository;
-import org.antlr.v4.runtime.misc.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Locale;
-import javax.print.Doc;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -45,30 +43,12 @@ public class DoctorServiceImpl implements DoctorService {
         doctorRepository.save(existingDoctor);
     }
     @Override
-    public void saveDoctorWithUser(Doctor doctor) {
-        // 1. Create a new User for the Doctor
-        User user = new User();
-        user.setUserName(doctor.getName().toLowerCase().replaceAll("\\s+", "") + doctor.getContactNumber());
-        user.setPassword("{noop}doctor@123"); // Use BCrypt encoder in production
-        user.setRole(User.Role.DOCTOR);
-
-        // 2. Save User first to generate user_id
-        User savedUser = userRepository.save(user);
-
-        // 3. Set user in Doctor entity
-        doctor.setUser(savedUser);
-
-        // 4. Save Doctor
-        doctorRepository.save(doctor);
-    }
-    @Override
     public List<String> getAvailabilitySlots(int doctorId) {
         Doctor doctor = doctorRepository.findById(doctorId).orElse(null);
         if (doctor == null || doctor.getAvailabilitySchedule() == null) {
             return Collections.emptyList();
         }
 
-        // Assuming newline or comma separated values
         return Arrays.stream(doctor.getAvailabilitySchedule().split("\\r?\\n"))
                 .map(String::trim)
                 .filter(line -> !line.isEmpty())
@@ -94,7 +74,7 @@ public class DoctorServiceImpl implements DoctorService {
                     try {
                         if (!line.contains(":") || !line.contains("-")) return false;
 
-                        // Example: "MONDAY-FRIDAY: 09:00 AM - 05:00 PM"
+                        // "MONDAY-FRIDAY: 09:00 AM - 05:00 PM"
                         String[] dayAndTime = line.split(":", 2);
                         if (dayAndTime.length != 2) return false;
 

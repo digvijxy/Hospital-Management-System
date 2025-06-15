@@ -29,7 +29,7 @@ public class BillingController {
     @Autowired
     private BillRepository billRepository;
 
-    // 1️⃣ Generate a new bill
+
     @GetMapping("/generateBill")
     public String generateBill(
             @RequestParam int patientId,
